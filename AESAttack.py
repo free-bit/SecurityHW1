@@ -76,22 +76,30 @@ def attack(DP, cipher):
   unchanged_len=16+16-change_len
   #combine
   new_ciphertext = orig_cipher[:unchanged_len]+new_cipher_block+orig_cipher[32:]
+  #save
+  with open('cipher.txt','wb+') as file:
+    file.write(new_ciphertext)
   # formatted_ciphertext = ''
   # for x in ciphertext:
   #   formatted_ciphertext+='\\x{}'.format(x.encode('hex'))
   # print formatted_ciphertext
-  x=AES.new(key, AES.MODE_CBC, iv).decrypt(new_ciphertext)
-  formatted = ''
-  for each in x:
-    if(ord(each)<32):
-      formatted+='\\x{}'.format(each.encode('hex'))
-    else:
-      formatted+=each
-  print formatted
+  # x=AES.new(key, AES.MODE_CBC, iv).decrypt(new_ciphertext)
+  # formatted = ''
+  # for each in x:
+  #   if(ord(each)<32):
+  #     formatted+='\\x{}'.format(each.encode('hex'))
+  #   else:
+  #     formatted+=each
+  # print formatted
 
 def main(argv): 
-    cipher=argv[0] #Read as byte string (there are unprintable chars)
-    dp=argv[1]     #Read as string 
+    #Read bytes from a specified file
+    cipherfile=argv[0]
+    cipher=''
+    with open(cipherfile,'rb') as cf:
+      cipher=cf.read()
+    #Read as string 
+    dp=argv[1]
     attack(dp,cipher)
 
 # NOTE: command line args have to be passed with enclosing quotes. 
